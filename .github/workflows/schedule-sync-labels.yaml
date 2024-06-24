@@ -9,24 +9,25 @@ on: # yamllint disable-line rule:truthy
 jobs:
   labels:
     name: Sync Labels
-    runs-on: ubuntu-latest
-    if: github.repository == 'k8s-at-home/charts'
+    runs-on: [ "self-hosted","geek-cookbook-funkypenguin-co-nz" ]
+    container: funkypenguin/chart-tools # # necessary for running ARC with k8s jobs 
+    if: github.repository == 'geek-cookbook/charts'
     steps:
-      - name: Generate Token
-        uses: tibdex/github-app-token@v1
-        id: generate-token
-        with:
-          app_id: ${{ secrets.K8S_AT_HOME_APP_ID }}
-          private_key: ${{ secrets.K8S_AT_HOME_APP_PRIVATE_KEY }}
+      # - name: Generate Token
+      #   uses: tibdex/github-app-token@v1
+      #   id: generate-token
+      #   with:
+      #     app_id: ${{ secrets.K8S_AT_HOME_APP_ID }}
+      #     private_key: ${{ secrets.K8S_AT_HOME_APP_PRIVATE_KEY }}
 
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          token: "${{ secrets.RENOVATE_TOKEN }}"
 
       - name: Sync Labels
         uses: EndBug/label-sync@v2
         with:
           config-file: .github/labels.yaml
-          token: "${{ steps.generate-token.outputs.token }}"
+          token: "${{ secrets.RENOVATE_TOKEN }}"
           delete-other-labels: true

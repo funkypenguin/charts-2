@@ -3,25 +3,25 @@ apiVersion: v2
 appVersion: 4.37.0
 description: Ghost is a blogging and publishing software
 name: ghost
-version: 2.1.2
+version: 2.2.0
 kubeVersion: ">=1.19.0-0"
 keywords:
   - ghost
   - blogging
-home: https://github.com/k8s-at-home/charts/tree/master/charts/stable/ghost
+home: https://github.com/geek-cookbook/charts/tree/master/charts/stable/ghost
 icon: https://ghost.org/images/logos/logo-black-1.png
 sources:
   - https://github.com/TryGhost/Ghost
   - https://github.com/TryGhost/Ghost-CLI
 maintainers:
   - name: samip5
-    email: sm+k8s-at-home+git@samip.fi
+    email: sm+geek-cookbook+git@samip.fi
 dependencies:
   - name: common
     repository: https://library-charts.k8s-at-home.com
     version: 4.5.2
   - name: mariadb
-    version: 11.0.14
+    version: 11.4.2
     repository: https://charts.bitnami.com/bitnami
     condition: mariadb.enabled
 annotations:

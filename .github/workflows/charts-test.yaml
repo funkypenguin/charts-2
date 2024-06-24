@@ -10,10 +10,16 @@ on:
         required: true
         type: string
 
+env:
+  HELM_VERSION: 3.9.2
+  RUBY_VERSION: 2.7
+  PYTHON_VERSION: 3.10
+  K3D_VERSION: 1.24
+
 jobs:
   unit-test:
     name: Run unit tests
-    runs-on: ubuntu-latest
+    runs-on: [ "self-hosted" ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -25,13 +31,13 @@ jobs:
         uses: yokawasa/action-setup-kube-tools@v0.8.2
         with:
           setup-tools: |
-            helmv3
-          helm: "3.8.0"
+            helm
+          helm: "${{ env.HELM_VERSION }}"
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: "${{ env.RUBY_VERSION }}"
 
       - name: Install dependencies
         env:
@@ -47,7 +53,8 @@ jobs:
 
   generate-install-matrix:
     name: Generate matrix for install
-    runs-on: ubuntu-latest
+    runs-on: [ "self-hosted","geek-cookbook-funkypenguin-co-nz" ]
+    container: funkypenguin/chart-tools # # necessary for running ARC with k8s jobs 
     outputs:
       matrix: |
         {
@@ -85,7 +92,8 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.generate-install-matrix.outputs.matrix) }}
       fail-fast: false
-    runs-on: ubuntu-latest
+    runs-on: [ "self-hosted","geek-cookbook-funkypenguin-co-nz" ]
+    container: funkypenguin/chart-tools # # necessary for running ARC with k8s jobs 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -97,12 +105,12 @@ jobs:
         uses: yokawasa/action-setup-kube-tools@v0.8.2
         with:
           setup-tools: |
-            helmv3
-          helm: "3.6.3"
+            helm
+          helm: "${{ env.HELM_VERSION }}"
 
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "${{ env.PYTHON_VERSION }}"
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.3.0
@@ -110,7 +118,7 @@ jobs:
       - name: Create k3d cluster
         uses: nolar/setup-k3d-k3s@v1
         with:
-          version: v1.19
+          version: "${{ env.K3D_VERSION }}"
 
       - name: Remove node taints
         run: |
@@ -127,7 +135,8 @@ jobs:
     if: |
       always()
     name: Install successful
-    runs-on: ubuntu-latest
+    runs-on: [ "self-hosted","geek-cookbook-funkypenguin-co-nz" ]
+    container: funkypenguin/chart-tools # # necessary for running ARC with k8s jobs 
     steps:
       - name: Check install matrix status
         if: ${{ (needs.generate-install-matrix.outputs.detected == 'true') && (needs.install-charts.result != 'success') }}

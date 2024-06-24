@@ -11,7 +11,7 @@ dendrite:
       -----END MATRIX PRIVATE KEY-----
   polylith_ingress:
     enabled: true
-    host: matrix.k8s-at-home.org
+    host: matrix.geek-cookbook.org
 nats:
   enabled: true
 persistence:

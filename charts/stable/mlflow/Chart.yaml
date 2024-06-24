@@ -1,0 +1,33 @@
+---
+apiVersion: v2
+appVersion: 2.1.1
+description: MLflow is an open source platform for managing the end-to-end machine learning lifecycle
+name: mlflow
+version: 0.0.1
+kubeVersion: ">=1.16.0-0"
+keywords:
+  - machine-learning
+  - ml
+home: https://github.com/geek-cookbook/charts/tree/master/charts/stable/mlflow
+icon: https://mlflow.org/docs/latest/_static/MLflow-logo-final-black.png
+sources:
+  - https://github.com/mlflow/mlflow
+maintainers:
+  - name: funkypenguin
+    email: davidy@funkypenguin.co.nz
+dependencies:
+  - name: common
+    repository: https://library-charts.k8s-at-home.com
+    version: 4.5.2
+  - name: postgresql
+    version: 12.1.6
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: mariadb
+    version: 11.4.2
+    repository: https://charts.bitnami.com/bitnami
+    condition: mariadb.enabled
+annotations:
+  artifacthub.io/changes: |-
+    - kind: added
+      description: Initial release

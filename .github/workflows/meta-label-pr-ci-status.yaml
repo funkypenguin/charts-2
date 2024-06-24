@@ -11,7 +11,8 @@ on:
 jobs:
   label-ci-status:
     name: Label CI status
-    runs-on: ubuntu-latest
+    runs-on: [ "self-hosted","geek-cookbook-funkypenguin-co-nz" ]
+    container: funkypenguin/chart-tools # # necessary for running ARC with k8s jobs  
     steps:
       - name: Generate Token
         uses: tibdex/github-app-token@v1
@@ -23,12 +24,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          token: "${{ secrets.RENOVATE_TOKEN }}"
 
       - name: Download workflow artifact
         uses: dawidd6/action-download-artifact@v2.22.0
         with:
-          github_token: ${{ steps.generate-token.outputs.token }}
+          github_token: "${{ secrets.RENOVATE_TOKEN }}"
           workflow: pr-validate.yaml
           run_id: ${{ github.event.workflow_run.id }}
           name: pr_metadata
@@ -44,7 +45,7 @@ jobs:
         uses: actions/github-script@v6
         id: get-workflow-jobs
         with:
-          github-token: ${{ steps.generate-token.outputs.token }}
+          github-token: "${{ secrets.RENOVATE_TOKEN }}"
           # https://mhagemann.medium.com/the-ultimate-way-to-slugify-a-url-string-in-javascript-b8e4a0d849e1
           script: |
             function slugify(string) {
@@ -80,7 +81,7 @@ jobs:
       - name: Label pre-commit status
         uses: ./.github/actions/label-from-status
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          token: "${{ secrets.RENOVATE_TOKEN }}"
           issue-number: ${{ steps.pr_num_reader.outputs.content }}
           prefix: precommit
           job-status: |-
@@ -90,7 +91,7 @@ jobs:
       - name: Label changelog status
         uses: ./.github/actions/label-from-status
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          token: "${{ secrets.RENOVATE_TOKEN }}"
           issue-number: ${{ steps.pr_num_reader.outputs.content }}
           prefix: changelog
           job-status: |-
@@ -100,7 +101,7 @@ jobs:
       - name: Label chart lint status
         uses: ./.github/actions/label-from-status
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          token: "${{ secrets.RENOVATE_TOKEN }}"
           issue-number: ${{ steps.pr_num_reader.outputs.content }}
           prefix: lint
           job-status: |-
@@ -110,7 +111,7 @@ jobs:
       - name: Label chart install status
         uses: ./.github/actions/label-from-status
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          token: "${{ secrets.RENOVATE_TOKEN }}"
           issue-number: ${{ steps.pr_num_reader.outputs.content }}
           prefix: install
           job-status: |-

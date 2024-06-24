@@ -4,11 +4,11 @@
 
 Cert-Manager Webhook for DNSMadeEasy
 
-**This chart is not maintained by the upstream project and any issues with the chart should be raised [here](https://github.com/k8s-at-home/charts/issues/new/choose)**
+**This chart is not maintained by the upstream project and any issues with the chart should be raised [here](https://github.com/geek-cookbook/charts/issues/new/choose)**
 
 ## Source Code
 
-* <https://github.com/k8s-at-home/dnsmadeeasy-webhook>
+* <https://github.com/geek-cookbook/dnsmadeeasy-webhook>
 * <https://cert-manager.io>
 
 ## Requirements
@@ -23,9 +23,9 @@ Cert-Manager Webhook for DNSMadeEasy
 ## TL;DR
 
 ```console
-helm repo add k8s-at-home https://k8s-at-home.com/charts/
+helm repo add geek-cookbook https://geek-cookbook.github.io/charts/
 helm repo update
-helm install dnsmadeeasy-webhook k8s-at-home/dnsmadeeasy-webhook
+helm install dnsmadeeasy-webhook geek-cookbook/dnsmadeeasy-webhook
 ```
 
 ## Installing the Chart
@@ -33,7 +33,7 @@ helm install dnsmadeeasy-webhook k8s-at-home/dnsmadeeasy-webhook
 To install the chart with the release name `dnsmadeeasy-webhook`
 
 ```console
-helm install dnsmadeeasy-webhook k8s-at-home/dnsmadeeasy-webhook
+helm install dnsmadeeasy-webhook geek-cookbook/dnsmadeeasy-webhook
 ```
 
 ## Uninstalling the Chart
@@ -49,20 +49,20 @@ The command removes all the Kubernetes components associated with the chart **in
 ## Configuration
 
 Read through the [values.yaml](./values.yaml) file. It has several commented out suggested values.
-Other values may be used from the [values.yaml](https://github.com/k8s-at-home/library-charts/tree/main/charts/stable/common/values.yaml) from the [common library](https://github.com/k8s-at-home/library-charts/tree/main/charts/stable/common).
+Other values may be used from the [values.yaml](https://github.com/geek-cookbook/library-charts/tree/main/charts/stable/common/values.yaml) from the [common library](https://github.com/geek-cookbook/library-charts/tree/main/charts/stable/common).
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
 ```console
 helm install dnsmadeeasy-webhook \
   --set env.TZ="America/New York" \
-    k8s-at-home/dnsmadeeasy-webhook
+    geek-cookbook/dnsmadeeasy-webhook
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart.
 
 ```console
-helm install dnsmadeeasy-webhook k8s-at-home/dnsmadeeasy-webhook -f values.yaml
+helm install dnsmadeeasy-webhook geek-cookbook/dnsmadeeasy-webhook -f values.yaml
 ```
 
 ## Custom configuration
@@ -71,7 +71,7 @@ N/A
 
 ## Values
 
-**Important**: When deploying an application Helm chart you can add more values from our common library chart [here](https://github.com/k8s-at-home/library-charts/tree/main/charts/stable/common)
+**Important**: When deploying an application Helm chart you can add more values from our common library chart [here](https://github.com/geek-cookbook/library-charts/tree/main/charts/stable/common)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -81,7 +81,7 @@ N/A
 | generateCerts | bool | `true` | Generate dedicated certs instead of re-using the cert-manager webhook certificate. |
 | groupName | string | `"acme.mycompany.com"` | The GroupName here is used to identify your company or business unit that created this webhook. This name will need to be referenced in each Issuer's `webhook` stanza to inform cert-manager of where to send ChallengePayload resources in order to solve the DNS01 challenge. This group name should be **unique**, hence using your own company's domain here is recommended. |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"ghcr.io/k8s-at-home/dnsmadeeasy-webhook"` | Image repository |
+| image.repository | string | `"ghcr.io/geek-cookbook/dnsmadeeasy-webhook"` | Image repository |
 | image.tag | string | `"v1.2.0"` | Image tag |
 | serviceAccount.create | bool | `true` | Create service account |
 
@@ -103,14 +103,14 @@ N/A
 
 ### Older versions
 
-A historical overview of changes can be found on [ArtifactHUB](https://artifacthub.io/packages/helm/k8s-at-home/dnsmadeeasy-webhook?modal=changelog)
+A historical overview of changes can be found on [ArtifactHUB](https://artifacthub.io/packages/helm/geek-cookbook/dnsmadeeasy-webhook?modal=changelog)
 
 ## Support
 
-- See the [Docs](https://docs.k8s-at-home.com/our-helm-charts/getting-started/)
-- Open an [issue](https://github.com/k8s-at-home/charts/issues/new/choose)
-- Ask a [question](https://github.com/k8s-at-home/organization/discussions)
-- Join our [Discord](https://discord.gg/sTMX7Vh) community
+- See the [Docs](https://geek-cookbook.funkypenguin.co.nz/)
+- Open an [issue](https://github.com/geek-cookbook/charts/issues/new/choose)
+- Ask a [question](https://github.com/geek-cookbook/organization/discussions)
+- Join our [Discord](http://chat.funkypenguin.co.nz) community
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v0.1.1](https://github.com/k8s-at-home/helm-docs/releases/v0.1.1)
+Autogenerated from chart metadata using [helm-docs v0.1.1](https://github.com/geek-cookbook/helm-docs/releases/v0.1.1)

@@ -1,0 +1,27 @@
+---
+apiVersion: v2
+appVersion: latest
+description: A free and open source alternative Twitter front-end focused on privacy and performance. 
+name: nitter
+version: 1.0.0
+kubeVersion: ">=1.16.0-0"
+keywords:
+  - nitter
+home: https://github.com/geek-cookbook/charts/tree/master/charts/stable/nitter
+sources:
+  - https://github.com/zedeus/nitter
+maintainers:
+  - name: funkypenguin
+    email: davidy@funkypenguin.co.nz
+dependencies:
+  - name: common
+    repository: https://library-charts.k8s-at-home.com
+    version: 4.5.2
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: 16.13.1
+    condition: redis.enabled    
+annotations:
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: Initial release

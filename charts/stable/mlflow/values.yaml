@@ -1,0 +1,83 @@
+#
+# IMPORTANT NOTE
+#
+# This chart inherits from our common library chart. You can check the default values/options here:
+# https://github.com/geek-cookbook/library-charts/tree/main/charts/stable/common/values.yaml
+#
+
+image:
+  # -- image repository
+  repository: mlflow/mlflow
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+  # -- image tag
+  tag:
+
+command:
+  - mlflow
+  - server
+args:
+  - --host
+  - "0.0.0.0"
+  - --port
+  - "5000"
+
+# -- environment variables. See more environment variables in the [mlflow documentation](https://mlflow.io/documentation/install-docker-image/)
+env:
+  BACKEND_STORE_URI: "postgresql://mlflow:mlflow-pass@postgresql:5432/mlflow"
+  DEFAULT_ARTIFACT_ROOT:
+  MLFLOW_S3_ENDPOINT_URL:
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:
+
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        port: 5000
+
+ingress:
+  # -- Enable and configure ingress settings for the chart under this key.
+  # @default -- See values.yaml
+  main:
+    enabled: false
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+persistence: {}
+  # params:
+  #   enabled: false
+  #   mountPath: /etc/mlflow/config/params
+  # data:
+  #   enabled: false
+  #   mountPath: /etc/mlflow/data
+
+# -- Enable and configure mariadb database subchart under this key.
+#    For more options see [mariadb chart documentation](https://github.com/bitnami/charts/tree/master/bitnami/mariadb).
+# @default -- See values.yaml
+mariadb:
+  enabled: false
+  architecture: standalone
+  auth:
+    database: mlflow
+    username: mlflow
+    password: mlflow-pass
+    rootPassword: mlflowrootpass
+  primary:
+    persistence:
+      enabled: false
+      # storageClass: ""
+
+# -- Enable and configure postgres database subchart under this key.
+#    For more options see [postgres chart documentation](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
+# @default -- See values.yaml
+postgresql:
+  enabled: false
+  postgresqlUsername: mlflow
+  postgresqlPassword: mlflow-pass
+  postgresqlDatabase: mlflow
+  persistence:
+    enabled: false
+    # storageClass: ""

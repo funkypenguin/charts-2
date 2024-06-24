@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: v0.9.4
 description: Dendrite Matrix Homeserver
 name: dendrite
-version: 6.3.1
+version: 6.4.0
 kubeVersion: ">=1.16.0-0"
 keywords:
   - dendrite
@@ -12,7 +12,7 @@ keywords:
   - monolith
   - federation
   - polylith
-home: https://github.com/k8s-at-home/charts/tree/master/charts/stable/dendrite
+home: https://github.com/geek-cookbook/charts/tree/master/charts/stable/dendrite
 sources:
   - https://github.com/matrix-org/dendrite
   - https://github.com/matrix-org/dendrite/tree/master/build/docker
@@ -24,11 +24,11 @@ dependencies:
     repository: https://library-charts.k8s-at-home.com
     version: 4.5.2
   - name: postgresql
-    version: 11.6.21
+    version: 11.9.13
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
   - name: nats
-    version: 0.17.1
+    version: 0.19.4
     repository: https://nats-io.github.io/k8s/helm/charts/
     condition: nats.enabled
   # Client API

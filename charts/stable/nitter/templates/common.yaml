@@ -1,0 +1,19 @@
+{{/* Make sure all variables are set properly */}}
+{{- include "common.values.setup" . }}
+
+{{/* Append the hardcoded settings */}}
+{{- define "nitter.harcodedValues" -}}
+persistence:
+  nitter-config:
+    enabled: true
+    mountPath: "/src/nitter.conf"
+    subPath: "nitter.conf"
+    type: "custom"
+    volumeSpec:
+      configMap:
+        name: {{ include "common.names.fullname" . }}-config
+{{- end -}}
+{{- $_ := mergeOverwrite .Values (include "nitter.harcodedValues" . | fromYaml) -}}
+
+{{/* Render the templates */}}
+{{ include "common.all" . }}

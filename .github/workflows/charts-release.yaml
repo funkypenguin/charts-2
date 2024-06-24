@@ -6,35 +6,23 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+      - main
     paths:
       - "charts/**"
 
+env:
+  HELM_VERSION: 3.9.2
+  YQ_VERSION: 4.16.2
+
 jobs:
   release:
-    runs-on: ubuntu-20.04
+    runs-on: [ "self-hosted" ]
     steps:
-      - name: Generate Token
-        uses: tibdex/github-app-token@v1
-        id: generate-token
-        with:
-          app_id: ${{ secrets.K8S_AT_HOME_APP_ID }}
-          private_key: ${{ secrets.K8S_AT_HOME_APP_PRIVATE_KEY }}
-
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          # token: ${{ steps.generate-token.outputs.token }}
           fetch-depth: 0
-
-      - name: Install Kubernetes tools
-        uses: yokawasa/action-setup-kube-tools@v0.8.2
-        with:
-          setup-tools: |
-            helmv3
-            yq
-          helm: "3.8.0"
-          yq: "4.16.2"
 
       - name: Install helm-docs
         run: |
@@ -62,11 +50,11 @@ jobs:
         id: create-commit
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          file_pattern: charts/**/
+          file_pattern: charts/**
           commit_message: "chore: Auto-update chart README [skip ci]"
-          commit_user_name: k8s-at-home[bot]
-          commit_user_email: k8s-at-home[bot]@users.noreply.github.com
-          commit_author: k8s-at-home[bot] <k8s-at-home[bot]@users.noreply.github.com>
+          commit_user_name: geek-cookbook[bot]
+          commit_user_email: geek-cookbook[bot]@users.noreply.github.com
+          commit_author: geek-cookbook[bot] <geek-cookbook[bot]@users.noreply.github.com>
 
       - name: Save commit hash
         id: save-commit-hash
@@ -80,48 +68,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          # token: ${{ steps.generate-token.outputs.token }}
           ref: ${{ steps.save-commit-hash.outputs.commit_hash }}
           fetch-depth: 0
 
       - name: Configure Git
         run: |
-          git config user.name "k8s-at-home[bot]"
-          git config user.email "k8s-at-home[bot]@users.noreply.github.com"
+          git config user.name "geek-cookbook[bot]"
+          git config user.email "geek-cookbook[bot]@users.noreply.github.com"
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.4.0
         with:
           charts_dir: charts/*
-          charts_repo_url: https://k8s-at-home.com/charts/
+          charts_repo_url: https://geek-cookbook.github.io/charts/
         env:
-          CR_TOKEN: "${{ steps.generate-token.outputs.token }}"
+          CR_TOKEN: "${{ secrets.RENOVATE_TOKEN }}"
           CR_SKIP_EXISTING: "true"
 
   generate-summary:
     name: Auto-generate charts summary
-    runs-on: ubuntu-20.04
+    runs-on: [ "self-hosted","geek-cookbook-funkypenguin-co-nz" ]
+    container: funkypenguin/chart-tools # # necessary for running ARC with k8s jobs 
     needs:
       - release
     steps:
-      - name: Generate Token
-        uses: tibdex/github-app-token@v1
-        id: generate-token
-        with:
-          app_id: ${{ secrets.K8S_AT_HOME_APP_ID }}
-          private_key: ${{ secrets.K8S_AT_HOME_APP_PRIVATE_KEY }}
 
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ steps.generate-token.outputs.token }}
-          ref: master
+          # token: ${{ steps.generate-token.outputs.token }}
+          ref: main
           fetch-depth: 0
-
-      - name: Install yq
-        uses: chrisdickinson/setup-yq@latest
-        with:
-          yq-version: v4.9.3
 
       - name: Run script
         run: |
@@ -132,7 +110,7 @@ jobs:
         with:
           push_options: --force
           commit_message: Auto-generate chart summary [no ci]
-          commit_user_name: k8s-at-home[bot]
-          commit_user_email: k8s-at-home[bot]@users.noreply.github.com
-          commit_author: k8s-at-home[bot] <k8s-at-home[bot]@users.noreply.github.com>
+          commit_user_name: geek-cookbook[bot]
+          commit_user_email: geek-cookbook[bot]@users.noreply.github.com
+          commit_author: geek-cookbook[bot] <geek-cookbook[bot]@users.noreply.github.com>
           file_pattern: charts/README.md
